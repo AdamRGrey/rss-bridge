@@ -195,7 +195,6 @@ class ImgurBridge extends BridgeAbstract {
 					$url = 'https://api.imgur.com/3/album/'
 						. $album->id
 						. '/images';
-					$item['content'] .= $url;
 					$imgs = $this->simpleGetFromJson($url)->data;
 				}
 				foreach ($imgs as $image) {
