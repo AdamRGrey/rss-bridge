@@ -190,7 +190,15 @@ class ImgurBridge extends BridgeAbstract {
 			}
 
 			if(property_exists($album, 'images')) {
-				foreach ($album->images as $image) {
+				$imgs = $album->images;
+				if($album->images_count > 3){
+					$url = 'https://api.imgur.com/3/album/'
+						. $album->id
+						. '/images';
+					$item['content'] .= $url;
+					$imgs = $this->simpleGetFromJson($url)->data;
+				}
+				foreach ($imgs as $image) {
 					$item['content'] .= $this->albumImage2Html($image);
 				}
 			}elseif(property_exists($album, 'link')) {
