@@ -244,8 +244,7 @@ class ImgurBridge extends BridgeAbstract {
 			$txt .= '<img src="' . $img->link . '" /><br />';
 		}
 		if(null !== $img->description && trim($img->description) !== '') {
-			$desc = htmlentities($img->description);
-			$desc = str_replace('\n', '<br />', $desc);
+			$desc = str_replace("\n", '<br />', $img->description);
 			$txt .= $desc . '<br />';
 		}
 		return $txt;
