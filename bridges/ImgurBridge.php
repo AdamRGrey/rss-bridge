@@ -1,15 +1,8 @@
 <?php
 class ImgurBridge extends BridgeAbstract {
-	const PARAM_CLIENTID = array(
-				'name' => '(your) Client ID',
-				'title' => 'register an application and use the ID',
-				'pattern' => '[0-9a-z]{15}',
-				'required' => true
-			);
-
-	const NAME = 'Imgur Bridge via API';
+	const NAME = 'Imgur Bridge';
 	const URI = 'https://imgur.com/';
-	const DESCRIPTION = 'get imgur stuff with your own API key';
+	const DESCRIPTION = 'get imgur stuff with API an key';
 	const MAINTAINER = '@AdamRGrey';
 	const PARAMETERS = array(
 		'User' => array(
@@ -19,8 +12,7 @@ class ImgurBridge extends BridgeAbstract {
 				'title' => 'only ascii letters, numbers, underscores, dashes',
 				'pattern' => '[a-zA-Z0-9-_]+',
 				'required' => true
-			),
-			'clientId' => ImgurBridge::PARAM_CLIENTID
+			)
 		),
 		'Tag' => array(
 			't' => array(
@@ -29,8 +21,7 @@ class ImgurBridge extends BridgeAbstract {
 				'title' => 'only ascii letters, numbers, underscores, dashes',
 				'pattern' => '[a-zA-Z0-9-_]+',
 				'required' => true
-			),
-			'clientId' => ImgurBridge::PARAM_CLIENTID
+			)
 		),
 		'Gallery' => array(
 			'section' => array(
@@ -68,14 +59,15 @@ class ImgurBridge extends BridgeAbstract {
 					'All' => 'all'
 				),
 				'defaultValue' => 'day'
-			),
-			'clientId' => ImgurBridge::PARAM_CLIENTID
+			)
 		),
-		'Leaderboard' => array(
-			'clientId' => ImgurBridge::PARAM_CLIENTID
-		),
+		'Leaderboard' => array(),
 	);
-
+	const CONFIGURATION = array(
+		'api_key' => array(
+			'required' => true,
+		)
+	);
 	
 	public function getName() {
 
@@ -220,7 +212,7 @@ class ImgurBridge extends BridgeAbstract {
 
 	private function itemizeTopComments(){
 		$url = 'https://api.imgur.com/comment/v1/comments/top?client_id='
-			. $this->getInput('clientId');
+			. $this->getOption('api_key');
 		$response = $this->simpleGetFromJson($url);
 
 		for ($i=0; $i < count($response->data); $i++) { 
@@ -262,7 +254,7 @@ class ImgurBridge extends BridgeAbstract {
 			'http' => [
 				'method' => 'GET',
 				'header' => ['Authorization: Client-ID '
-					. $this->getInput('clientId')
+					. $this->getOption('api_key')
 				]
 			]
 		]);
