@@ -27,7 +27,6 @@ class ImgurBridge extends BridgeAbstract {
 			'section' => array(
 				'name' => 'section',
 				'type' => 'list',
-				'required' => true,
 				'values' => array(
 					'Hot' => 'hot',
 					'Top' => 'top',
@@ -38,7 +37,6 @@ class ImgurBridge extends BridgeAbstract {
 			'sort' => array(
 				'name' => 'sort',
 				'type' => 'list',
-				'required' => true,
 				'values' => array(
 					'Viral' => 'viral',
 					'Top' => 'top',
@@ -50,7 +48,6 @@ class ImgurBridge extends BridgeAbstract {
 			'window' => array(
 				'name' => 'window',
 				'type' => 'list',
-				'required' => true,
 				'values' => array(
 					'Day' => 'day',
 					'Week' => 'week',
@@ -157,7 +154,7 @@ class ImgurBridge extends BridgeAbstract {
 			default:
 				returnClientError(
 					'Unknown context: "'
-					. $this->queriedContext 
+					. $this->queriedContext
 					. '"!'
 				);
 
@@ -203,11 +200,11 @@ class ImgurBridge extends BridgeAbstract {
 
 	private function withOrdinal($number) {
 		//from https://stackoverflow.com/a/3110033/1173856
-	    $ends = array('th','st','nd','rd','th','th','th','th','th','th');
-	    if ((($number % 100) >= 11) && (($number%100) <= 13))
-	        return $number . 'th';
-	    else
-	        return $number . $ends[$number % 10];
+		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
+		if ((($number % 100) >= 11) && (($number % 100) <= 13))
+			return $number . 'th';
+		else
+			return $number . $ends[$number % 10];
 	}
 
 	private function itemizeTopComments(){
@@ -215,7 +212,7 @@ class ImgurBridge extends BridgeAbstract {
 			. $this->getOption('api_key');
 		$response = $this->simpleGetFromJson($url);
 
-		for ($i=0; $i < count($response->data); $i++) { 
+		for ($i=0; $i < count($response->data); $i++) {
 			$comment = $response->data[$i];
 
 			$item = array();
@@ -237,7 +234,7 @@ class ImgurBridge extends BridgeAbstract {
 		$txt = '';
 		if(substr($img->type, 0, 6) !== 'image/') {
 			$txt .= '<video src="'
-				. $img->link 
+				. $img->link
 				. '" controls></video><br />';
 		}else{
 			$txt .= '<img src="' . $img->link . '" /><br />';
@@ -251,12 +248,13 @@ class ImgurBridge extends BridgeAbstract {
 
 	private function simpleGetFromJson($url){
 		$context = stream_context_create([
-			'http' => [
-				'method' => 'GET',
-				'header' => ['Authorization: Client-ID '
-					. $this->getOption('api_key')
-				]
-			]
+			'http' => 
+				array(
+					'method' => 'GET',
+					'header' => array(
+							'Authorization: Client-ID ' . $this->getOption('api_key')
+						)
+				)
 		]);
 		$result = file_get_contents($url, false, $context);
 		return json_decode($result, false);
